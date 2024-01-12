@@ -1,28 +1,22 @@
-from sys import stdin
-def input(): return stdin.readline().rstrip()
-
+import collections
+import sys
 
 n = int(input())
-edges = [map(int, input().split()) for _ in range(n-1)]
+graph = collections.defaultdict(list)
+answer = [0] * (n + 1)
+answer[1] = -1
+stack = [1]
 
-graph = [[] for _ in range(n+1)]
-for a, b in edges:
+for _ in range(n-1):
+    a, b = map(int, sys.stdin.readline().split())
     graph[a].append(b)
     graph[b].append(a)
 
-
-root = 1
-parents = [0] * (n+1)
-parents[root] = -1
-
-
-stack = [root]
 while stack:
     node = stack.pop()
     for child in graph[node]:
-        if parents[child] != 0:
-            continue
-        parents[child] = node
-        stack.append(child)
+        if answer[child] == 0:
+            answer[child] = node
+            stack.append(child)
 
-print(*parents[2:], sep='\n')
+print(*answer[2:], sep='\n')
